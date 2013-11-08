@@ -1,5 +1,5 @@
 /*!
- * Bootstrap v3.0.1 by @fat and @mdo
+ * Bootstrap v3.0.2 by @fat and @mdo
  * Copyright 2013 Twitter, Inc.
  * Licensed under http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -1921,22 +1921,6 @@ output {
   vertical-align: middle;
 }
 
-.form-control:-moz-placeholder {
-  color: #999999;
-}
-
-.form-control::-moz-placeholder {
-  color: #999999;
-}
-
-.form-control:-ms-input-placeholder {
-  color: #999999;
-}
-
-.form-control::-webkit-input-placeholder {
-  color: #999999;
-}
-
 .form-control {
   display: block;
   width: 100%;
@@ -1961,6 +1945,22 @@ output {
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.form-control:-moz-placeholder {
+  color: #999999;
+}
+
+.form-control::-moz-placeholder {
+  color: #999999;
+}
+
+.form-control:-ms-input-placeholder {
+  color: #999999;
+}
+
+.form-control::-webkit-input-placeholder {
+  color: #999999;
 }
 
 .form-control[disabled],
