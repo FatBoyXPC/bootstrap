@@ -42,7 +42,7 @@
  */
 
 body {
-  position: relative; /* For scrollyspy */
+  position: relative; /* For scrollspy */
 }
 
 /* Keep code small in tables on account of limited space */
@@ -252,6 +252,11 @@ body {
   margin: 0 auto 30px;
   font-size: 20px;
   color: #fff;
+}
+.bs-docs-masthead .version {
+  margin-top: -15px;
+  margin-bottom: 30px;
+  color: #9783b9;
 }
 .bs-docs-masthead .btn {
   width: 100%;
