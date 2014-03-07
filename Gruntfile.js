@@ -62,19 +62,23 @@ module.exports = function (grunt) {
 
     jscs: {
       options: {
-        config: 'js/.jscsrc',
+        config: 'js/.jscsrc'
       },
       grunt: {
-        src: ['Gruntfile.js', 'grunt/*.js']
+        options: {
+          'requireCamelCaseOrUpperCaseIdentifiers': null,
+          'requireParenthesesAroundIIFE': true
+        },
+        src: '<%= jshint.grunt.src %>'
       },
       src: {
-        src: 'js/*.js'
+        src: '<%= jshint.src.src %>'
       },
       test: {
-        src: 'js/tests/unit/*.js'
+        src: '<%= jshint.test.src %>'
       },
       assets: {
-        src: ['docs/assets/js/application.js', 'docs/assets/js/customizer.js']
+        src: '<%= jshint.assets.src %>'
       }
     },
 
@@ -84,10 +88,18 @@ module.exports = function (grunt) {
       },
       src: [
         'dist/css/bootstrap.css',
-        'dist/css/bootstrap-theme.css',
-        'docs/assets/css/docs.css',
+        'dist/css/bootstrap-theme.css'
+      ],
+      examples: [
         'docs/examples/**/*.css'
-      ]
+      ],
+      docs: {
+        options: {
+          'ids': false,
+          'overqualified-elements': false
+        },
+        src: ['docs/assets/css/docs.css']
+      }
     },
 
     concat: {
@@ -184,7 +196,16 @@ module.exports = function (grunt) {
         },
         files: {
           'dist/css/<%= pkg.name %>.min.css': 'dist/css/<%= pkg.name %>.css',
+          'dist/css/<%= pkg.name %>-rtl.min.css': 'dist/css/<%= pkg.name %>-rtl.css',
           'dist/css/<%= pkg.name %>-theme.min.css': 'dist/css/<%= pkg.name %>-theme.css'
+        }
+      }
+    },
+
+    css_flip: {
+      rtl: {
+        files: {
+          'dist/css/<%= pkg.name %>-rtl.css': 'dist/css/<%= pkg.name %>.css'
         }
       }
     },
@@ -214,7 +235,9 @@ module.exports = function (grunt) {
         files: {
           src: [
             'dist/css/<%= pkg.name %>.css',
+            'dist/css/<%= pkg.name %>-rtl.css',
             'dist/css/<%= pkg.name %>.min.css',
+            'dist/css/<%= pkg.name %>-rtl.min.css',
             'dist/css/<%= pkg.name %>-theme.css',
             'dist/css/<%= pkg.name %>-theme.min.css'
           ]
@@ -229,6 +252,7 @@ module.exports = function (grunt) {
       dist: {
         files: {
           'dist/css/<%= pkg.name %>.css': 'dist/css/<%= pkg.name %>.css',
+          'dist/css/<%= pkg.name %>-rtl.css': 'dist/css/<%= pkg.name %>-rtl.css',
           'dist/css/<%= pkg.name %>-theme.css': 'dist/css/<%= pkg.name %>-theme.css'
         }
       },
@@ -237,6 +261,11 @@ module.exports = function (grunt) {
         cwd: 'docs/examples/',
         src: ['**/*.css'],
         dest: 'docs/examples/'
+      },
+      docs: {
+        files: {
+          'docs/assets/css/docs.css': 'docs/assets/css/docs.css'
+        }
       }
     },
 
@@ -389,7 +418,8 @@ module.exports = function (grunt) {
   grunt.registerTask('dist-js', ['concat', 'uglify']);
 
   // CSS distribution task.
-  grunt.registerTask('dist-css', ['less', 'cssmin', 'csscomb', 'usebanner']);
+  grunt.registerTask('less-compile', ['less:compileCore', 'less:compileTheme']);
+  grunt.registerTask('dist-css', ['less-compile', 'css_flip', 'less:minify', 'cssmin', 'csscomb', 'usebanner']);
 
   // Docs distribution task.
   grunt.registerTask('dist-docs', 'copy:docs');
