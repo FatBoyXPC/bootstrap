@@ -56,7 +56,7 @@ module.exports = function (grunt) {
         src: 'js/tests/unit/*.js'
       },
       assets: {
-        src: ['docs/assets/js/application.js', 'docs/assets/js/customizer.js']
+        src: 'docs/assets/js/src/*.js'
       }
     },
 
@@ -98,7 +98,7 @@ module.exports = function (grunt) {
           'ids': false,
           'overqualified-elements': false
         },
-        src: ['docs/assets/css/docs.css']
+        src: 'docs/assets/css/src/docs.css'
       }
     },
 
@@ -148,7 +148,7 @@ module.exports = function (grunt) {
           'docs/assets/js/vendor/blob.js',
           'docs/assets/js/vendor/filesaver.js',
           'docs/assets/js/raw-files.min.js',
-          'docs/assets/js/customizer.js'
+          'docs/assets/js/src/customizer.js'
         ],
         dest: 'docs/assets/js/customize.min.js'
       },
@@ -158,7 +158,7 @@ module.exports = function (grunt) {
         },
         src: [
           'docs/assets/js/vendor/holder.js',
-          'docs/assets/js/application.js'
+          'docs/assets/js/src/application.js'
         ],
         dest: 'docs/assets/js/docs.min.js'
       }
@@ -202,6 +202,33 @@ module.exports = function (grunt) {
       }
     },
 
+    autoprefixer: {
+      options: {
+        browsers: ['last 2 versions', 'ie 8', 'ie 9', 'android 2.3', 'android 4', 'opera 12']
+      },
+      core: {
+        options: {
+          map: true
+        },
+        src: 'dist/css/<%= pkg.name %>.css'
+      },
+      theme: {
+        options: {
+          map: true
+        },
+        src: 'dist/css/<%= pkg.name %>-theme.css'
+      },
+      docs: {
+        src: 'docs/assets/css/docs.css'
+      },
+      examples: {
+        expand: true,
+        cwd: 'docs/examples/',
+        src: ['**/*.css'],
+        dest: 'docs/examples/'
+      }
+    },
+
     css_flip: {
       rtl: {
         files: {
@@ -219,8 +246,8 @@ module.exports = function (grunt) {
           compatibility: 'ie8'
         },
         src: [
-          'docs/assets/css/docs.css',
-          'docs/assets/css/pygments-manni.css'
+          'docs/assets/css/src/docs.css',
+          'docs/assets/css/src/pygments-manni.css'
         ],
         dest: 'docs/assets/css/docs.min.css'
       }
@@ -259,12 +286,12 @@ module.exports = function (grunt) {
       examples: {
         expand: true,
         cwd: 'docs/examples/',
-        src: ['**/*.css'],
+        src: '**/*.css',
         dest: 'docs/examples/'
       },
       docs: {
         files: {
-          'docs/assets/css/docs.css': 'docs/assets/css/docs.css'
+          'docs/assets/css/src/docs.css': 'docs/assets/css/src/docs.css'
         }
       }
     },
@@ -391,6 +418,7 @@ module.exports = function (grunt) {
 
   // These plugins provide necessary tasks.
   require('load-grunt-tasks')(grunt, {scope: 'devDependencies'});
+  require('time-grunt')(grunt);
 
   // Docs HTML validation task
   grunt.registerTask('validate-html', ['jekyll', 'validation']);
@@ -419,7 +447,7 @@ module.exports = function (grunt) {
 
   // CSS distribution task.
   grunt.registerTask('less-compile', ['less:compileCore', 'less:compileTheme']);
-  grunt.registerTask('dist-css', ['less-compile', 'css_flip', 'less:minify', 'cssmin', 'csscomb', 'usebanner']);
+  grunt.registerTask('dist-css', ['less-compile', 'autoprefixer', 'css_flip', 'csscomb', 'less:minify', 'cssmin', 'usebanner']);
 
   // Docs distribution task.
   grunt.registerTask('dist-docs', 'copy:docs');
